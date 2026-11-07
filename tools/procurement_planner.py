@@ -3,8 +3,9 @@ Deterministic Procurement Planner for StockPilot.
 
 Builds a comprehensive inventory procurement plan by:
 - Using forecast_demand as the single source of daily demand
-- Evaluating all suppliers per product for reorder quantities, lead-time shortfall,
-  and total purchasing cost
+- Computing a fixed planning-horizon required quantity per product (independent of supplier lead time)
+- Evaluating all suppliers per product for order quantities (respecting MOQ), lead-time shortfall,
+  revenue at risk, and total purchasing cost
 - Generating two alternative strategies ("Cheapest" vs "Fastest")
 - Constructing an optimal "Recommended" plan that prioritizes avoiding stockouts,
   then minimizes cost, complete with traceable reasoning for every decision
@@ -21,16 +22,23 @@ from tools.reorder_calculation import calculate_reorder
 from tools.supplier_comparison import compare_suppliers
 
 
-def build_procurement_plan(horizon_days: int = 7, coverage_days: int = 14) -> Dict[str, Any]:
+def build_procurement_plan(
+    horizon_days: int = 7,
+    coverage_days: int = 14,
+    planning_horizon_days: int = 30,
+) -> Dict[str, Any]:
     """
     Build a deterministic procurement plan across all catalog products.
 
     Args:
-        horizon_days: Forecast horizon in days (default: 7).
+        horizon_days: Forecast horizon in days used by forecast_demand (default: 7).
         coverage_days: Target post-arrival inventory coverage in days (default: 14).
+        planning_horizon_days: Fixed replenishment planning horizon in days (default: 30)
+                               used to determine order quantities across all suppliers.
 
     Returns:
         dict: A JSON-serializable dictionary containing:
+            - planning_horizon_days: Fixed horizon used (30 days)
             - products: List of all products sorted by urgency (Critical, High, Medium, Low)
             - strategies:
                 - cheapest: Orders and portfolio totals prioritizing lowest unit cost
@@ -74,75 +82,67 @@ def build_procurement_plan(horizon_days: int = 7, coverage_days: int = 14) -> Di
         else:
             days_of_cover = round(current_stock / daily_demand, 2)
 
-        # 3. Retrieve supplier catalog for product
+        # 3. Fixed required quantity across planning horizon, independent of supplier
+        required_qty = int(math.ceil(max(0.0, daily_demand * planning_horizon_days - current_stock)))
+        action = "No order needed" if required_qty == 0 else "Order needed"
+
+        # 4. Retrieve supplier catalog for product
         comp_zero = compare_suppliers(pid, required_qty=0)
         if "error" in comp_zero:
             return {"error": f"Supplier lookup failed for {pid}: {comp_zero['error']}"}
 
         supplier_catalog = comp_zero["suppliers"]
 
-        # 4. Evaluate each supplier option
+        # 5. Evaluate each supplier option
         supplier_evals = []
-        all_zero_order = True
 
-        for sup in supplier_catalog:
-            sup_id = str(sup["supplier_id"])
-            sup_name = str(sup["supplier_name"])
-            unit_cost = float(sup["unit_cost"])
-            lead_time = int(sup["lead_time_days"])
-            moq = int(sup["min_order_qty"])
+        if action == "Order needed":
+            for sup in supplier_catalog:
+                sup_id = str(sup["supplier_id"])
+                sup_name = str(sup["supplier_name"])
+                unit_cost = float(sup["unit_cost"])
+                lead_time = int(sup["lead_time_days"])
+                moq = int(sup["min_order_qty"])
 
-            # Call calculate_reorder with supplier lead time and forecast override
-            reorder_info = calculate_reorder(
-                product_id=pid,
-                lead_time_days=lead_time,
-                coverage_days=coverage_days,
-                daily_demand_override=daily_demand,
-            )
-            rec_qty = int(reorder_info["recommended_order_qty"])
-            shortfall = float(reorder_info["shortfall_before_arrival"])
-            uncovered_days = float(reorder_info["days_uncovered_before_arrival"])
-            risk_level = str(reorder_info["risk_level"])
-
-            if rec_qty > 0:
-                all_zero_order = False
-
-            # Query compare_suppliers to get effective order quantity (respecting MOQ) and total cost
-            sup_comp = compare_suppliers(pid, required_qty=rec_qty)
-            matching_sup = next(
-                (s for s in sup_comp["suppliers"] if s["supplier_id"] == sup_id),
-                None,
-            )
-            if matching_sup:
-                order_qty = int(matching_sup["order_qty"])
-                total_cost = float(matching_sup["total_cost"])
-            else:
-                order_qty = max(rec_qty, moq)
+                # Order quantity respects supplier MOQ
+                order_qty = int(max(required_qty, moq))
                 total_cost = round(order_qty * unit_cost, 2)
 
-            supplier_evals.append({
-                "product_id": pid,
-                "product_name": name,
-                "supplier_id": sup_id,
-                "supplier_name": sup_name,
-                "unit_cost": unit_cost,
-                "lead_time_days": lead_time,
-                "min_order_qty": moq,
-                "recommended_order_qty": rec_qty,
-                "order_qty": order_qty,
-                "total_cost": total_cost,
-                "shortfall_before_arrival": shortfall,
-                "days_uncovered_before_arrival": uncovered_days,
-                "risk_level": risk_level,
-            })
+                # Risk level and buffer deficit from calculate_reorder
+                reorder_info = calculate_reorder(
+                    product_id=pid,
+                    lead_time_days=lead_time,
+                    coverage_days=coverage_days,
+                    daily_demand_override=daily_demand,
+                )
+                shortfall = float(round(max(0.0, daily_demand * lead_time - current_stock), 2))
+                uncovered_days = float(reorder_info["days_uncovered_before_arrival"])
+                risk_level = str(reorder_info["risk_level"])
 
-        action = "No order needed" if all_zero_order else "Order needed"
+                # Revenue at risk = shortfall_before_arrival * unit_price (reported only, not in total_cost)
+                revenue_at_risk = round(shortfall * unit_price, 2)
+
+                supplier_evals.append({
+                    "product_id": pid,
+                    "product_name": name,
+                    "supplier_id": sup_id,
+                    "supplier_name": sup_name,
+                    "unit_cost": unit_cost,
+                    "lead_time_days": lead_time,
+                    "min_order_qty": moq,
+                    "required_qty": required_qty,
+                    "order_qty": order_qty,
+                    "total_cost": total_cost,
+                    "shortfall_before_arrival": shortfall,
+                    "days_uncovered_before_arrival": uncovered_days,
+                    "revenue_at_risk": revenue_at_risk,
+                    "risk_level": risk_level,
+                })
 
         # Determine overall product risk level for urgency ranking
         if action == "No order needed":
             overall_risk = "Low"
         else:
-            # Evaluate risk level under fastest supplier (minimum lead time)
             fastest_sup_eval = min(supplier_evals, key=lambda s: s["lead_time_days"])
             overall_risk = fastest_sup_eval["risk_level"]
 
@@ -154,9 +154,10 @@ def build_procurement_plan(horizon_days: int = 7, coverage_days: int = 14) -> Di
             "current_stock": current_stock,
             "daily_demand": daily_demand,
             "days_of_cover": days_of_cover,
+            "required_qty": required_qty,
             "action": action,
             "risk_level": overall_risk,
-            "supplier_options": [] if action == "No order needed" else supplier_evals,
+            "supplier_options": supplier_evals,
         }
         evaluated_products.append(product_record)
 
@@ -178,16 +179,21 @@ def build_procurement_plan(horizon_days: int = 7, coverage_days: int = 14) -> Di
                 "total_cost": 0.0,
                 "average_lead_time": 0.0,
                 "total_units_short": 0.0,
+                "total_revenue_at_risk": 0.0,
+                "revenue_at_risk": 0.0,
                 "critical_or_high_count": 0,
             }
         tot_cost = round(sum(o["total_cost"] for o in orders), 2)
         avg_lead = round(sum(o["lead_time_days"] for o in orders) / len(orders), 2)
         tot_short = round(sum(o["shortfall_before_arrival"] for o in orders), 2)
+        tot_rev_risk = round(sum(o["revenue_at_risk"] for o in orders), 2)
         crit_high = sum(1 for o in orders if o["risk_level"] in ("Critical", "High"))
         return {
             "total_cost": tot_cost,
             "average_lead_time": avg_lead,
             "total_units_short": tot_short,
+            "total_revenue_at_risk": tot_rev_risk,
+            "revenue_at_risk": tot_rev_risk,
             "critical_or_high_count": crit_high,
         }
 
@@ -201,11 +207,14 @@ def build_procurement_plan(horizon_days: int = 7, coverage_days: int = 14) -> Di
             "product_id": prod["product_id"],
             "supplier_id": best_cheap["supplier_id"],
             "supplier_name": best_cheap["supplier_name"],
+            "required_qty": best_cheap["required_qty"],
             "order_qty": best_cheap["order_qty"],
+            "unit_cost": best_cheap["unit_cost"],
             "total_cost": best_cheap["total_cost"],
             "lead_time_days": best_cheap["lead_time_days"],
             "shortfall_before_arrival": best_cheap["shortfall_before_arrival"],
             "days_uncovered_before_arrival": best_cheap["days_uncovered_before_arrival"],
+            "revenue_at_risk": best_cheap["revenue_at_risk"],
             "risk_level": best_cheap["risk_level"],
         })
     cheapest_totals = _compute_totals(cheapest_orders)
@@ -220,11 +229,14 @@ def build_procurement_plan(horizon_days: int = 7, coverage_days: int = 14) -> Di
             "product_id": prod["product_id"],
             "supplier_id": best_fast["supplier_id"],
             "supplier_name": best_fast["supplier_name"],
+            "required_qty": best_fast["required_qty"],
             "order_qty": best_fast["order_qty"],
+            "unit_cost": best_fast["unit_cost"],
             "total_cost": best_fast["total_cost"],
             "lead_time_days": best_fast["lead_time_days"],
             "shortfall_before_arrival": best_fast["shortfall_before_arrival"],
             "days_uncovered_before_arrival": best_fast["days_uncovered_before_arrival"],
+            "revenue_at_risk": best_fast["revenue_at_risk"],
             "risk_level": best_fast["risk_level"],
         })
     fastest_totals = _compute_totals(fastest_orders)
@@ -266,17 +278,21 @@ def build_procurement_plan(horizon_days: int = 7, coverage_days: int = 14) -> Di
             "product_id": prod["product_id"],
             "supplier_id": chosen["supplier_id"],
             "supplier_name": chosen["supplier_name"],
+            "required_qty": chosen["required_qty"],
             "order_qty": chosen["order_qty"],
+            "unit_cost": chosen["unit_cost"],
             "total_cost": chosen["total_cost"],
             "lead_time_days": chosen["lead_time_days"],
             "shortfall_before_arrival": chosen["shortfall_before_arrival"],
             "days_uncovered_before_arrival": chosen["days_uncovered_before_arrival"],
+            "revenue_at_risk": chosen["revenue_at_risk"],
             "risk_level": chosen["risk_level"],
             "reason": reason,
         })
     recommended_totals = _compute_totals(recommended_orders)
 
     return {
+        "planning_horizon_days": planning_horizon_days,
         "products": evaluated_products,
         "strategies": {
             "cheapest": {
@@ -305,4 +321,3 @@ def build_procurement_plan(horizon_days: int = 7, coverage_days: int = 14) -> Di
             "totals": recommended_totals,
         },
     }
-

@@ -1,15 +1,22 @@
 """
-Test Suite for Deterministic Procurement Planner (StockPilot Step 4).
+Test Suite for Deterministic Procurement Planner (StockPilot Step 4b).
 
 Validates:
 1. All 10 products exist in the procurement plan.
 2. P002 and P005 have action 'No order needed'.
 3. P001 and P004 appear with risk 'Critical' under the Cheapest strategy.
-4. P001 under the Fastest strategy has days_uncovered_before_arrival > 0,
-   and its recommended reason states that no supplier avoids a stockout.
-5. Every recommended/cheapest/fastest order quantity respects the supplier's minimum order quantity (MOQ).
-6. Recommended plan's total units short <= Cheapest strategy's total units short.
-7. Plan is fully JSON-serializable without NumPy type errors.
+4. For each product needing an order, required_qty is identical across all suppliers
+   before minimum order quantity (MOQ) is applied.
+5. Every order quantity in all strategies respects the supplier's MOQ.
+6. Recommended plan's total_cost <= Fastest strategy's total_cost, AND
+   recommended plan's total_units_short <= Cheapest strategy's total_units_short.
+7. P001 under every supplier still has shortfall > 0 or days_uncovered > 0 for suppliers
+   slower than 2 days, and the P001 reason confirms no supplier avoids a stockout.
+8. Plan is fully JSON-serializable without NumPy type errors.
+
+Also prints (without assertion):
+- List of products where recommended supplier differs from Fastest supplier
+- List of products where recommended supplier differs from Cheapest supplier
 """
 
 import json
@@ -27,10 +34,10 @@ from tools.supplier_comparison import compare_suppliers
 
 def run_tests():
     print("=" * 80)
-    print("STARTING DETERMINISTIC PROCUREMENT PLANNER VERIFICATION")
+    print("STARTING DETERMINISTIC PROCUREMENT PLANNER VERIFICATION (Step 4b)")
     print("=" * 80)
 
-    plan = build_procurement_plan(horizon_days=7, coverage_days=14)
+    plan = build_procurement_plan(horizon_days=7, coverage_days=14, planning_horizon_days=30)
     assert isinstance(plan, dict), f"Plan must be a dict, got {type(plan)}"
     assert "error" not in plan, f"build_procurement_plan returned error: {plan.get('error')}"
 
@@ -68,34 +75,24 @@ def run_tests():
     print(" -> PASSED: P001 and P004 both flagged as 'Critical' under Cheapest strategy.")
 
     # --------------------------------------------------------------------------
-    # Check 4: P001 under Fastest strategy has uncovered days > 0 and reason states
-    # no supplier avoids a stockout
+    # Check 4: required_qty is identical across all suppliers before MOQ
     # --------------------------------------------------------------------------
-    print("\n[Check 4] Verifying P001 under Fastest strategy & Recommended reasoning...")
-    fastest_orders = plan["strategies"]["fastest"]["orders"]
-    p001_fast = next((o for o in fastest_orders if o["product_id"] == "P001"), None)
-    assert p001_fast is not None, "P001 missing from Fastest orders"
-    print(f" -> P001 Fastest lead time: {p001_fast['lead_time_days']} days")
-    print(f" -> P001 Days uncovered before arrival: {p001_fast['days_uncovered_before_arrival']} days")
-    assert p001_fast["days_uncovered_before_arrival"] > 0, (
-        f"Expected P001 days_uncovered_before_arrival > 0, got {p001_fast['days_uncovered_before_arrival']}"
-    )
-
-    rec_orders = plan["strategies"]["recommended"]["orders"]
-    p001_rec = next((o for o in rec_orders if o["product_id"] == "P001"), None)
-    assert p001_rec is not None, "P001 missing from Recommended orders"
-    reason = p001_rec["reason"].lower()
-    print(f" -> P001 Recommended reason: \"{p001_rec['reason']}\"")
-    assert "no supplier avoids a stockout" in reason, (
-        f"Expected reason to state that no supplier avoids a stockout, got: {p001_rec['reason']}"
-    )
-    print(" -> PASSED: P001 has uncovered buffer gap and reason confirms no supplier avoids stockout.")
+    print("\n[Check 4] Verifying required_qty is identical across all suppliers before MOQ...")
+    for prod in products:
+        if prod["action"] == "Order needed":
+            base_req = prod["required_qty"]
+            assert base_req > 0, f"Expected required_qty > 0 for {prod['product_id']}, got {base_req}"
+            for sup_eval in prod["supplier_options"]:
+                assert sup_eval["required_qty"] == base_req, (
+                    f"Product {prod['product_id']} supplier {sup_eval['supplier_id']} required_qty "
+                    f"({sup_eval['required_qty']}) does not match product base ({base_req})"
+                )
+    print(" -> PASSED: For each product needing an order, required_qty is supplier-independent.")
 
     # --------------------------------------------------------------------------
     # Check 5: Every order_qty is >= supplier's minimum order quantity (MOQ)
     # --------------------------------------------------------------------------
     print("\n[Check 5] Verifying all order quantities respect supplier MOQ...")
-    # Preload supplier MOQs
     moq_lookup = {}
     for pid in expected_pids:
         c = compare_suppliers(pid, 0)
@@ -110,25 +107,54 @@ def run_tests():
             assert o["order_qty"] >= moq, (
                 f"Order qty {o['order_qty']} for {key} in {strat_name} is below MOQ {moq}"
             )
-    print(" -> PASSED: All order quantities in all strategies strictly satisfy MOQs.")
+    print(" -> PASSED: All order quantities across all strategies strictly satisfy MOQs.")
 
     # --------------------------------------------------------------------------
-    # Check 6: Recommended plan total_units_short <= Cheapest strategy total_units_short
+    # Check 6: Recommended total_cost <= Fastest total_cost AND
+    #          Recommended total_units_short <= Cheapest total_units_short
     # --------------------------------------------------------------------------
-    print("\n[Check 6] Verifying Recommended total units short <= Cheapest total units short...")
-    rec_short = plan["strategies"]["recommended"]["totals"]["total_units_short"]
-    cheap_short = plan["strategies"]["cheapest"]["totals"]["total_units_short"]
-    print(f" -> Recommended Total Units Short : {rec_short}")
-    print(f" -> Cheapest Total Units Short    : {cheap_short}")
-    assert rec_short <= cheap_short, (
-        f"Recommended short ({rec_short}) should be <= Cheapest short ({cheap_short})"
+    print("\n[Check 6] Verifying strategy portfolio comparisons...")
+    rec_totals = plan["strategies"]["recommended"]["totals"]
+    fast_totals = plan["strategies"]["fastest"]["totals"]
+    cheap_totals = plan["strategies"]["cheapest"]["totals"]
+
+    print(f" -> Recommended Total Cost  : ${rec_totals['total_cost']:,.2f}")
+    print(f" -> Fastest Total Cost      : ${fast_totals['total_cost']:,.2f}")
+    print(f" -> Recommended Units Short : {rec_totals['total_units_short']}")
+    print(f" -> Cheapest Units Short    : {cheap_totals['total_units_short']}")
+
+    assert rec_totals["total_cost"] <= fast_totals["total_cost"], (
+        f"Recommended cost (${rec_totals['total_cost']}) must be <= Fastest cost (${fast_totals['total_cost']})"
     )
-    print(" -> PASSED: Recommended plan successfully reduces or matches stockout exposure.")
+    assert rec_totals["total_units_short"] <= cheap_totals["total_units_short"], (
+        f"Recommended short ({rec_totals['total_units_short']}) must be <= Cheapest short ({cheap_totals['total_units_short']})"
+    )
+    print(" -> PASSED: Recommended plan is more cost-effective than Fastest while maintaining low shortfall.")
 
     # --------------------------------------------------------------------------
-    # Check 7: JSON serialization succeeds without NumPy types
+    # Check 7: P001 shortfall/uncovered days and reason confirms no supplier avoids stockout
     # --------------------------------------------------------------------------
-    print("\n[Check 7] Verifying JSON serialization (no NumPy types)...")
+    print("\n[Check 7] Verifying P001 supplier shortfall and decision reasoning...")
+    p001_prod = next(p for p in products if p["product_id"] == "P001")
+    for s in p001_prod["supplier_options"]:
+        if s["lead_time_days"] > 2:
+            assert s["shortfall_before_arrival"] > 0 or s["days_uncovered_before_arrival"] > 0, (
+                f"P001 supplier {s['supplier_id']} (lead {s['lead_time_days']}d) should have shortfall or uncovered days"
+            )
+
+    rec_orders = plan["strategies"]["recommended"]["orders"]
+    p001_rec = next(o for o in rec_orders if o["product_id"] == "P001")
+    reason = p001_rec["reason"].lower()
+    print(f" -> P001 Recommended reason: \"{p001_rec['reason']}\"")
+    assert "no supplier avoids a stockout" in reason, (
+        f"Expected reason to state that no supplier avoids a stockout, got: {p001_rec['reason']}"
+    )
+    print(" -> PASSED: P001 has deficit under slower suppliers and reason confirms no supplier avoids stockout.")
+
+    # --------------------------------------------------------------------------
+    # Check 8: JSON serialization succeeds without NumPy types
+    # --------------------------------------------------------------------------
+    print("\n[Check 8] Verifying JSON serialization (no NumPy types)...")
     try:
         serialized = json.dumps(plan)
         assert len(serialized) > 0
@@ -136,11 +162,47 @@ def run_tests():
         assert False, f"JSON serialization failed with TypeError (likely NumPy type present): {e}"
     print(" -> PASSED: Plan serialized to JSON cleanly with zero type errors.")
 
+    # --------------------------------------------------------------------------
+    # INFORMATIONAL PRINTS (Do not assert)
+    # --------------------------------------------------------------------------
     print("\n" + "=" * 80)
-    print("ALL PLANNER ASSERTIONS PASSED SUCCESSFULLY.")
+    print("INFORMATIONAL STRATEGY DIVERGENCE (Recommended vs. Fastest / Cheapest)")
+    print("=" * 80)
+
+    fast_sup_map = {o["product_id"]: o["supplier_id"] for o in plan["strategies"]["fastest"]["orders"]}
+    cheap_sup_map = {o["product_id"]: o["supplier_id"] for o in plan["strategies"]["cheapest"]["orders"]}
+    rec_sup_map = {o["product_id"]: o["supplier_id"] for o in plan["strategies"]["recommended"]["orders"]}
+
+    diff_from_fastest = [
+        f"{pid}: Rec={rec_sup_map[pid]} vs Fast={fast_sup_map[pid]}"
+        for pid in rec_sup_map
+        if rec_sup_map[pid] != fast_sup_map[pid]
+    ]
+
+    diff_from_cheapest = [
+        f"{pid}: Rec={rec_sup_map[pid]} vs Cheap={cheap_sup_map[pid]}"
+        for pid in rec_sup_map
+        if rec_sup_map[pid] != cheap_sup_map[pid]
+    ]
+
+    print(f"Products where Recommended supplier differs from Fastest ({len(diff_from_fastest)}):")
+    if diff_from_fastest:
+        for item in diff_from_fastest:
+            print(f" - {item}")
+    else:
+        print(" - None (Recommended chose fastest for all ordering products)")
+
+    print(f"\nProducts where Recommended supplier differs from Cheapest ({len(diff_from_cheapest)}):")
+    if diff_from_cheapest:
+        for item in diff_from_cheapest:
+            print(f" - {item}")
+    else:
+        print(" - None (Recommended chose cheapest for all ordering products)")
+
+    print("\n" + "=" * 80)
+    print("ALL PLANNER ASSERTIONS (Step 4b) PASSED SUCCESSFULLY.")
     print("=" * 80)
 
 
 if __name__ == "__main__":
     run_tests()
-
