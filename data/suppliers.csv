@@ -1,0 +1,24 @@
+supplier_id,supplier_name,product_id,unit_cost,lead_time_days,min_order_qty
+SUP-101,Apex Office Works,P001,88.0,14,50
+SUP-102,RapidSeat Logistics,P001,108.0,5,20
+SUP-103,SwiftFurnish Express,P001,125.0,2,10
+SUP-104,Pacific Keytronics,P002,36.0,21,100
+SUP-105,AeroTech Components,P002,45.0,7,30
+SUP-105,AeroTech Components,P003,58.0,15,40
+SUP-106,NexLink Technologies,P003,72.0,4,15
+SUP-107,SonicWave Global,P004,62.0,18,50
+SUP-108,Vanguard Audio Supply,P004,78.0,8,20
+SUP-103,SwiftFurnish Express,P004,92.0,3,10
+SUP-101,Apex Office Works,P005,14.5,16,60
+SUP-109,ErgoCare Distributors,P005,19.5,6,25
+SUP-104,Pacific Keytronics,P006,175.0,20,30
+SUP-106,NexLink Technologies,P006,215.0,6,10
+SUP-108,Vanguard Audio Supply,P007,54.0,12,40
+SUP-110,DirectPOS Hardware,P007,69.0,4,15
+SUP-101,Apex Office Works,P008,24.0,14,50
+SUP-109,ErgoCare Distributors,P008,32.0,5,15
+SUP-104,Pacific Keytronics,P009,18.0,18,80
+SUP-105,AeroTech Components,P009,23.5,8,30
+SUP-106,NexLink Technologies,P009,28.0,3,15
+SUP-107,SonicWave Global,P010,105.0,15,25
+SUP-110,DirectPOS Hardware,P010,135.0,4,8
