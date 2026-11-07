@@ -291,9 +291,54 @@ def build_procurement_plan(
         })
     recommended_totals = _compute_totals(recommended_orders)
 
+    # -------------------------------------------------------------------------
+    # Thin Buffer Analysis, Unavoidable Stockouts & Tradeoff Summary
+    # -------------------------------------------------------------------------
+    fastest_cost_by_pid = {o["product_id"]: o["total_cost"] for o in fastest_orders}
+    prod_cover_by_pid = {p["product_id"]: p["days_of_cover"] for p in evaluated_products}
+
+    thin_buffer_products = []
+    unavoidable_stockouts = []
+
+    for rec_o in recommended_orders:
+        pid = rec_o["product_id"]
+        shortfall = rec_o["shortfall_before_arrival"]
+        risk = rec_o["risk_level"]
+        if shortfall == 0.0 and risk in ("High", "Critical"):
+            fast_cost = fastest_cost_by_pid.get(pid, rec_o["total_cost"])
+            saved = round(fast_cost - rec_o["total_cost"], 2)
+            thin_buffer_products.append({
+                "product_id": pid,
+                "supplier_id": rec_o["supplier_id"],
+                "lead_time_days": rec_o["lead_time_days"],
+                "days_of_cover": prod_cover_by_pid.get(pid, 0.0),
+                "risk_level": risk,
+                "cost_saved_vs_fastest": saved,
+            })
+        elif shortfall > 0.0:
+            unavoidable_stockouts.append({
+                "product_id": pid,
+                "supplier_id": rec_o["supplier_id"],
+                "shortfall_before_arrival": shortfall,
+                "revenue_at_risk": rec_o["revenue_at_risk"],
+            })
+
+    cost_saved = round(fastest_totals["total_cost"] - recommended_totals["total_cost"], 2)
+    extra_lead = round(recommended_totals["average_lead_time"] - fastest_totals["average_lead_time"], 2)
+    extra_crit_high = int(recommended_totals["critical_or_high_count"] - fastest_totals["critical_or_high_count"])
+
+    recommended_vs_fastest = {
+        "cost_saved": cost_saved,
+        "extra_lead_time_days_avg": extra_lead,
+        "extra_crit_high_products": extra_crit_high,
+    }
+
     return {
         "planning_horizon_days": planning_horizon_days,
         "products": evaluated_products,
+        "thin_buffer_products": thin_buffer_products,
+        "unavoidable_stockouts": unavoidable_stockouts,
+        "recommended_vs_fastest": recommended_vs_fastest,
         "strategies": {
             "cheapest": {
                 "orders": cheapest_orders,

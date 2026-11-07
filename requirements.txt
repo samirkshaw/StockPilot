@@ -1,4 +1,4 @@
 pandas
 numpy
 python-dotenv
-
+google-genai

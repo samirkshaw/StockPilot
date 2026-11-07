@@ -163,6 +163,42 @@ def run_tests():
     print(" -> PASSED: Plan serialized to JSON cleanly with zero type errors.")
 
     # --------------------------------------------------------------------------
+    # Check 9: Step 5b thin_buffer_products and unavoidable_stockouts validation
+    # --------------------------------------------------------------------------
+    print("\n[Check 9] Verifying thin_buffer_products and unavoidable_stockouts (Step 5b)...")
+    thin_buffers = plan.get("thin_buffer_products", [])
+    unavoidable = plan.get("unavoidable_stockouts", [])
+
+    assert isinstance(thin_buffers, list), "thin_buffer_products must be a list"
+    assert isinstance(unavoidable, list), "unavoidable_stockouts must be a list"
+
+    # thin_buffer_products only contains rows with shortfall 0 and risk High/Critical
+    for tb in thin_buffers:
+        assert tb["risk_level"] in ("High", "Critical"), (
+            f"Product {tb['product_id']} in thin_buffer_products has invalid risk: {tb['risk_level']}"
+        )
+
+    # unavoidable_stockouts only contains rows with shortfall > 0
+    for u in unavoidable:
+        assert u["shortfall_before_arrival"] > 0, (
+            f"Product {u['product_id']} in unavoidable_stockouts has non-positive shortfall: {u['shortfall_before_arrival']}"
+        )
+
+    tb_pids = {tb["product_id"] for tb in thin_buffers}
+    un_pids = {u["product_id"] for u in unavoidable}
+
+    # P001 and P004 are in unavoidable_stockouts and NOT in thin_buffer_products
+    assert "P001" in un_pids, "P001 must be in unavoidable_stockouts"
+    assert "P004" in un_pids, "P004 must be in unavoidable_stockouts"
+    assert "P001" not in tb_pids, "P001 must NOT be in thin_buffer_products"
+    assert "P004" not in tb_pids, "P004 must NOT be in thin_buffer_products"
+
+    # Confirm json.dumps succeeds with new fields
+    json_str = json.dumps(plan)
+    assert len(json_str) > 0
+    print(" -> PASSED: thin_buffer_products and unavoidable_stockouts strictly validated.")
+
+    # --------------------------------------------------------------------------
     # INFORMATIONAL PRINTS (Do not assert)
     # --------------------------------------------------------------------------
     print("\n" + "=" * 80)

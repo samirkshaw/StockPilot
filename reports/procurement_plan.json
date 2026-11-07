@@ -444,6 +444,51 @@
       "supplier_options": []
     }
   ],
+  "thin_buffer_products": [
+    {
+      "product_id": "P007",
+      "supplier_id": "SUP-110",
+      "lead_time_days": 4,
+      "days_of_cover": 5.66,
+      "risk_level": "High",
+      "cost_saved_vs_fastest": 0.0
+    },
+    {
+      "product_id": "P008",
+      "supplier_id": "SUP-101",
+      "lead_time_days": 14,
+      "days_of_cover": 16.92,
+      "risk_level": "High",
+      "cost_saved_vs_fastest": 560.0
+    },
+    {
+      "product_id": "P009",
+      "supplier_id": "SUP-104",
+      "lead_time_days": 18,
+      "days_of_cover": 19.34,
+      "risk_level": "High",
+      "cost_saved_vs_fastest": 1990.0
+    }
+  ],
+  "unavoidable_stockouts": [
+    {
+      "product_id": "P001",
+      "supplier_id": "SUP-103",
+      "shortfall_before_arrival": 5.22,
+      "revenue_at_risk": 1043.95
+    },
+    {
+      "product_id": "P004",
+      "supplier_id": "SUP-103",
+      "shortfall_before_arrival": 17.61,
+      "revenue_at_risk": 2641.32
+    }
+  ],
+  "recommended_vs_fastest": {
+    "cost_saved": 2550.0,
+    "extra_lead_time_days_avg": 3.0,
+    "extra_crit_high_products": 2
+  },
   "strategies": {
     "cheapest": {
       "orders": [
