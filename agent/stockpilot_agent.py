@@ -101,29 +101,29 @@ def run_agent(
     clear_tool_cache()
 
     api_key = os.getenv("GEMINI_API_KEY")
-    model_name = os.getenv("GEMINI_MODEL")
+    model_name = os.getenv("GEMINI_MODEL") or ("mock-model" if client is not None else None)
     is_live_run = client is None
 
-    # Validation of credentials and configuration
-    if not api_key:
-        return {
-            "final_answer": "Error: GEMINI_API_KEY is missing from environment. Please set it in .env.",
-            "tool_calls": [],
-            "api_call_count": 0,
-            "model_used": model_name or "unknown",
-            "status": "error",
-        }
-
-    if not model_name:
-        return {
-            "final_answer": "Error: GEMINI_MODEL is missing from environment. Please set it in .env.",
-            "tool_calls": [],
-            "api_call_count": 0,
-            "model_used": "unknown",
-            "status": "error",
-        }
-
+    # Validation of credentials and configuration for live runs
     if is_live_run:
+        if not api_key:
+            return {
+                "final_answer": "Error: GEMINI_API_KEY is missing from environment. Please set it in .env.",
+                "tool_calls": [],
+                "api_call_count": 0,
+                "model_used": model_name or "unknown",
+                "status": "error",
+            }
+
+        if not model_name:
+            return {
+                "final_answer": "Error: GEMINI_MODEL is missing from environment. Please set it in .env.",
+                "tool_calls": [],
+                "api_call_count": 0,
+                "model_used": "unknown",
+                "status": "error",
+            }
+
         print("Warning: Free tier allows about 20 requests per day; this run will use roughly 3-6.")
         try:
             client = genai.Client(api_key=api_key)
@@ -135,6 +135,8 @@ def run_agent(
                 "model_used": model_name,
                 "status": "error",
             }
+    else:
+        model_name = model_name or "mock-model"
 
     api_call_count = 0
     tool_calls_record: List[Dict[str, Any]] = []
