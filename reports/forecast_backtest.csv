@@ -1,0 +1,11 @@
+product_id,moving_average_wape,exp_smoothing_wape,weekday_seasonal_wape,baseline_30d_wape,best_method,improvement_vs_baseline_pct,avg_daily_forecast
+P001,10.68,10.44,9.83,10.24,weekday_seasonal,0.41,10.11
+P002,16.4,16.37,16.11,16.29,weekday_seasonal,0.18,11.75
+P003,21.53,20.73,21.33,22.25,exp_smoothing,1.52,13.42
+P004,13.88,13.76,15.05,13.64,baseline_30d,0.0,5.87
+P005,20.49,21.33,26.05,21.93,moving_average,1.44,1.07
+P006,15.44,14.74,14.66,14.34,baseline_30d,0.0,14.97
+P007,16.85,16.67,15.01,16.66,weekday_seasonal,1.65,22.07
+P008,14.07,13.82,13.53,13.89,weekday_seasonal,0.36,5.32
+P009,14.67,14.66,13.41,14.63,weekday_seasonal,1.22,18.61
+P010,22.61,22.93,20.8,22.67,weekday_seasonal,1.87,2.57

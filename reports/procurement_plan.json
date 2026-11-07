@@ -1,0 +1,1023 @@
+{
+  "products": [
+    {
+      "product_id": "P004",
+      "name": "Noise-Cancelling Headphones",
+      "category": "Audio",
+      "unit_price": 149.99,
+      "current_stock": 0,
+      "daily_demand": 5.87,
+      "days_of_cover": 0.0,
+      "action": "Order needed",
+      "risk_level": "Critical",
+      "supplier_options": [
+        {
+          "product_id": "P004",
+          "product_name": "Noise-Cancelling Headphones",
+          "supplier_id": "SUP-107",
+          "supplier_name": "SonicWave Global",
+          "unit_cost": 62.0,
+          "lead_time_days": 18,
+          "min_order_qty": 50,
+          "recommended_order_qty": 197,
+          "order_qty": 197,
+          "total_cost": 12214.0,
+          "shortfall_before_arrival": 105.66,
+          "days_uncovered_before_arrival": 18.0,
+          "risk_level": "Critical"
+        },
+        {
+          "product_id": "P004",
+          "product_name": "Noise-Cancelling Headphones",
+          "supplier_id": "SUP-108",
+          "supplier_name": "Vanguard Audio Supply",
+          "unit_cost": 78.0,
+          "lead_time_days": 8,
+          "min_order_qty": 20,
+          "recommended_order_qty": 135,
+          "order_qty": 135,
+          "total_cost": 10530.0,
+          "shortfall_before_arrival": 46.96,
+          "days_uncovered_before_arrival": 8.0,
+          "risk_level": "Critical"
+        },
+        {
+          "product_id": "P004",
+          "product_name": "Noise-Cancelling Headphones",
+          "supplier_id": "SUP-103",
+          "supplier_name": "SwiftFurnish Express",
+          "unit_cost": 92.0,
+          "lead_time_days": 3,
+          "min_order_qty": 10,
+          "recommended_order_qty": 104,
+          "order_qty": 104,
+          "total_cost": 9568.0,
+          "shortfall_before_arrival": 17.61,
+          "days_uncovered_before_arrival": 3.0,
+          "risk_level": "Critical"
+        }
+      ]
+    },
+    {
+      "product_id": "P001",
+      "name": "Ergonomic Office Chair",
+      "category": "Furniture",
+      "unit_price": 199.99,
+      "current_stock": 15,
+      "daily_demand": 10.11,
+      "days_of_cover": 1.48,
+      "action": "Order needed",
+      "risk_level": "Critical",
+      "supplier_options": [
+        {
+          "product_id": "P001",
+          "product_name": "Ergonomic Office Chair",
+          "supplier_id": "SUP-101",
+          "supplier_name": "Apex Office Works",
+          "unit_cost": 88.0,
+          "lead_time_days": 14,
+          "min_order_qty": 50,
+          "recommended_order_qty": 279,
+          "order_qty": 279,
+          "total_cost": 24552.0,
+          "shortfall_before_arrival": 126.54,
+          "days_uncovered_before_arrival": 12.52,
+          "risk_level": "Critical"
+        },
+        {
+          "product_id": "P001",
+          "product_name": "Ergonomic Office Chair",
+          "supplier_id": "SUP-102",
+          "supplier_name": "RapidSeat Logistics",
+          "unit_cost": 108.0,
+          "lead_time_days": 5,
+          "min_order_qty": 20,
+          "recommended_order_qty": 184,
+          "order_qty": 184,
+          "total_cost": 19872.0,
+          "shortfall_before_arrival": 35.55,
+          "days_uncovered_before_arrival": 3.52,
+          "risk_level": "Critical"
+        },
+        {
+          "product_id": "P001",
+          "product_name": "Ergonomic Office Chair",
+          "supplier_id": "SUP-103",
+          "supplier_name": "SwiftFurnish Express",
+          "unit_cost": 125.0,
+          "lead_time_days": 2,
+          "min_order_qty": 10,
+          "recommended_order_qty": 151,
+          "order_qty": 151,
+          "total_cost": 18875.0,
+          "shortfall_before_arrival": 5.22,
+          "days_uncovered_before_arrival": 0.52,
+          "risk_level": "Critical"
+        }
+      ]
+    },
+    {
+      "product_id": "P007",
+      "name": "High-Speed Thermal Receipt Printer",
+      "category": "Office Equipment",
+      "unit_price": 119.99,
+      "current_stock": 125,
+      "daily_demand": 22.07,
+      "days_of_cover": 5.66,
+      "action": "Order needed",
+      "risk_level": "High",
+      "supplier_options": [
+        {
+          "product_id": "P007",
+          "product_name": "High-Speed Thermal Receipt Printer",
+          "supplier_id": "SUP-108",
+          "supplier_name": "Vanguard Audio Supply",
+          "unit_cost": 54.0,
+          "lead_time_days": 12,
+          "min_order_qty": 40,
+          "recommended_order_qty": 472,
+          "order_qty": 472,
+          "total_cost": 25488.0,
+          "shortfall_before_arrival": 139.84,
+          "days_uncovered_before_arrival": 6.34,
+          "risk_level": "Critical"
+        },
+        {
+          "product_id": "P007",
+          "product_name": "High-Speed Thermal Receipt Printer",
+          "supplier_id": "SUP-110",
+          "supplier_name": "DirectPOS Hardware",
+          "unit_cost": 69.0,
+          "lead_time_days": 4,
+          "min_order_qty": 15,
+          "recommended_order_qty": 286,
+          "order_qty": 286,
+          "total_cost": 19734.0,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "High"
+        }
+      ]
+    },
+    {
+      "product_id": "P003",
+      "name": "USB-C Dual 4K Docking Station",
+      "category": "Electronics",
+      "unit_price": 129.99,
+      "current_stock": 95,
+      "daily_demand": 13.42,
+      "days_of_cover": 7.08,
+      "action": "Order needed",
+      "risk_level": "Medium",
+      "supplier_options": [
+        {
+          "product_id": "P003",
+          "product_name": "USB-C Dual 4K Docking Station",
+          "supplier_id": "SUP-105",
+          "supplier_name": "AeroTech Components",
+          "unit_cost": 58.0,
+          "lead_time_days": 15,
+          "min_order_qty": 40,
+          "recommended_order_qty": 310,
+          "order_qty": 310,
+          "total_cost": 17980.0,
+          "shortfall_before_arrival": 106.3,
+          "days_uncovered_before_arrival": 7.92,
+          "risk_level": "Critical"
+        },
+        {
+          "product_id": "P003",
+          "product_name": "USB-C Dual 4K Docking Station",
+          "supplier_id": "SUP-106",
+          "supplier_name": "NexLink Technologies",
+          "unit_cost": 72.0,
+          "lead_time_days": 4,
+          "min_order_qty": 15,
+          "recommended_order_qty": 155,
+          "order_qty": 155,
+          "total_cost": 11160.0,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "Medium"
+        }
+      ]
+    },
+    {
+      "product_id": "P010",
+      "name": "Conference Room Speakerphone",
+      "category": "Audio",
+      "unit_price": 219.99,
+      "current_stock": 25,
+      "daily_demand": 2.57,
+      "days_of_cover": 9.73,
+      "action": "Order needed",
+      "risk_level": "Medium",
+      "supplier_options": [
+        {
+          "product_id": "P010",
+          "product_name": "Conference Room Speakerphone",
+          "supplier_id": "SUP-107",
+          "supplier_name": "SonicWave Global",
+          "unit_cost": 105.0,
+          "lead_time_days": 15,
+          "min_order_qty": 25,
+          "recommended_order_qty": 54,
+          "order_qty": 54,
+          "total_cost": 5670.0,
+          "shortfall_before_arrival": 13.55,
+          "days_uncovered_before_arrival": 5.27,
+          "risk_level": "Critical"
+        },
+        {
+          "product_id": "P010",
+          "product_name": "Conference Room Speakerphone",
+          "supplier_id": "SUP-110",
+          "supplier_name": "DirectPOS Hardware",
+          "unit_cost": 135.0,
+          "lead_time_days": 4,
+          "min_order_qty": 8,
+          "recommended_order_qty": 24,
+          "order_qty": 24,
+          "total_cost": 3240.0,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "Medium"
+        }
+      ]
+    },
+    {
+      "product_id": "P006",
+      "name": "Ultra-Wide 34-inch Monitor",
+      "category": "Electronics",
+      "unit_price": 349.99,
+      "current_stock": 180,
+      "daily_demand": 14.97,
+      "days_of_cover": 12.02,
+      "action": "Order needed",
+      "risk_level": "Medium",
+      "supplier_options": [
+        {
+          "product_id": "P006",
+          "product_name": "Ultra-Wide 34-inch Monitor",
+          "supplier_id": "SUP-104",
+          "supplier_name": "Pacific Keytronics",
+          "unit_cost": 175.0,
+          "lead_time_days": 20,
+          "min_order_qty": 30,
+          "recommended_order_qty": 350,
+          "order_qty": 350,
+          "total_cost": 61250.0,
+          "shortfall_before_arrival": 119.4,
+          "days_uncovered_before_arrival": 7.98,
+          "risk_level": "Critical"
+        },
+        {
+          "product_id": "P006",
+          "product_name": "Ultra-Wide 34-inch Monitor",
+          "supplier_id": "SUP-106",
+          "supplier_name": "NexLink Technologies",
+          "unit_cost": 215.0,
+          "lead_time_days": 6,
+          "min_order_qty": 10,
+          "recommended_order_qty": 131,
+          "order_qty": 131,
+          "total_cost": 28165.0,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "Medium"
+        }
+      ]
+    },
+    {
+      "product_id": "P008",
+      "name": "Heavy-Duty Dual Monitor Arm",
+      "category": "Accessories",
+      "unit_price": 59.99,
+      "current_stock": 90,
+      "daily_demand": 5.32,
+      "days_of_cover": 16.92,
+      "action": "Order needed",
+      "risk_level": "Low",
+      "supplier_options": [
+        {
+          "product_id": "P008",
+          "product_name": "Heavy-Duty Dual Monitor Arm",
+          "supplier_id": "SUP-101",
+          "supplier_name": "Apex Office Works",
+          "unit_cost": 24.0,
+          "lead_time_days": 14,
+          "min_order_qty": 50,
+          "recommended_order_qty": 65,
+          "order_qty": 65,
+          "total_cost": 1560.0,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "High"
+        },
+        {
+          "product_id": "P008",
+          "product_name": "Heavy-Duty Dual Monitor Arm",
+          "supplier_id": "SUP-109",
+          "supplier_name": "ErgoCare Distributors",
+          "unit_cost": 32.0,
+          "lead_time_days": 5,
+          "min_order_qty": 15,
+          "recommended_order_qty": 15,
+          "order_qty": 15,
+          "total_cost": 480.0,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "Low"
+        }
+      ]
+    },
+    {
+      "product_id": "P009",
+      "name": "Smart LED Desk Task Lamp",
+      "category": "Lighting",
+      "unit_price": 45.99,
+      "current_stock": 360,
+      "daily_demand": 18.61,
+      "days_of_cover": 19.34,
+      "action": "Order needed",
+      "risk_level": "Low",
+      "supplier_options": [
+        {
+          "product_id": "P009",
+          "product_name": "Smart LED Desk Task Lamp",
+          "supplier_id": "SUP-104",
+          "supplier_name": "Pacific Keytronics",
+          "unit_cost": 18.0,
+          "lead_time_days": 18,
+          "min_order_qty": 80,
+          "recommended_order_qty": 258,
+          "order_qty": 258,
+          "total_cost": 4644.0,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "High"
+        },
+        {
+          "product_id": "P009",
+          "product_name": "Smart LED Desk Task Lamp",
+          "supplier_id": "SUP-105",
+          "supplier_name": "AeroTech Components",
+          "unit_cost": 23.5,
+          "lead_time_days": 8,
+          "min_order_qty": 30,
+          "recommended_order_qty": 65,
+          "order_qty": 65,
+          "total_cost": 1527.5,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "Medium"
+        },
+        {
+          "product_id": "P009",
+          "product_name": "Smart LED Desk Task Lamp",
+          "supplier_id": "SUP-106",
+          "supplier_name": "NexLink Technologies",
+          "unit_cost": 28.0,
+          "lead_time_days": 3,
+          "min_order_qty": 15,
+          "recommended_order_qty": 0,
+          "order_qty": 15,
+          "total_cost": 420.0,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "Low"
+        }
+      ]
+    },
+    {
+      "product_id": "P002",
+      "name": "Wireless Mechanical Keyboard",
+      "category": "Electronics",
+      "unit_price": 89.99,
+      "current_stock": 500,
+      "daily_demand": 11.75,
+      "days_of_cover": 42.55,
+      "action": "No order needed",
+      "risk_level": "Low",
+      "supplier_options": []
+    },
+    {
+      "product_id": "P005",
+      "name": "Standing Desk Anti-Fatigue Mat",
+      "category": "Accessories",
+      "unit_price": 39.99,
+      "current_stock": 250,
+      "daily_demand": 1.07,
+      "days_of_cover": 233.64,
+      "action": "No order needed",
+      "risk_level": "Low",
+      "supplier_options": []
+    }
+  ],
+  "strategies": {
+    "cheapest": {
+      "orders": [
+        {
+          "product_id": "P001",
+          "supplier_id": "SUP-101",
+          "supplier_name": "Apex Office Works",
+          "order_qty": 279,
+          "total_cost": 24552.0,
+          "lead_time_days": 14,
+          "shortfall_before_arrival": 126.54,
+          "days_uncovered_before_arrival": 12.52,
+          "risk_level": "Critical"
+        },
+        {
+          "product_id": "P003",
+          "supplier_id": "SUP-105",
+          "supplier_name": "AeroTech Components",
+          "order_qty": 310,
+          "total_cost": 17980.0,
+          "lead_time_days": 15,
+          "shortfall_before_arrival": 106.3,
+          "days_uncovered_before_arrival": 7.92,
+          "risk_level": "Critical"
+        },
+        {
+          "product_id": "P004",
+          "supplier_id": "SUP-107",
+          "supplier_name": "SonicWave Global",
+          "order_qty": 197,
+          "total_cost": 12214.0,
+          "lead_time_days": 18,
+          "shortfall_before_arrival": 105.66,
+          "days_uncovered_before_arrival": 18.0,
+          "risk_level": "Critical"
+        },
+        {
+          "product_id": "P006",
+          "supplier_id": "SUP-104",
+          "supplier_name": "Pacific Keytronics",
+          "order_qty": 350,
+          "total_cost": 61250.0,
+          "lead_time_days": 20,
+          "shortfall_before_arrival": 119.4,
+          "days_uncovered_before_arrival": 7.98,
+          "risk_level": "Critical"
+        },
+        {
+          "product_id": "P007",
+          "supplier_id": "SUP-108",
+          "supplier_name": "Vanguard Audio Supply",
+          "order_qty": 472,
+          "total_cost": 25488.0,
+          "lead_time_days": 12,
+          "shortfall_before_arrival": 139.84,
+          "days_uncovered_before_arrival": 6.34,
+          "risk_level": "Critical"
+        },
+        {
+          "product_id": "P008",
+          "supplier_id": "SUP-101",
+          "supplier_name": "Apex Office Works",
+          "order_qty": 65,
+          "total_cost": 1560.0,
+          "lead_time_days": 14,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "High"
+        },
+        {
+          "product_id": "P009",
+          "supplier_id": "SUP-104",
+          "supplier_name": "Pacific Keytronics",
+          "order_qty": 258,
+          "total_cost": 4644.0,
+          "lead_time_days": 18,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "High"
+        },
+        {
+          "product_id": "P010",
+          "supplier_id": "SUP-107",
+          "supplier_name": "SonicWave Global",
+          "order_qty": 54,
+          "total_cost": 5670.0,
+          "lead_time_days": 15,
+          "shortfall_before_arrival": 13.55,
+          "days_uncovered_before_arrival": 5.27,
+          "risk_level": "Critical"
+        }
+      ],
+      "totals": {
+        "total_cost": 153358.0,
+        "average_lead_time": 15.75,
+        "total_units_short": 611.29,
+        "critical_or_high_count": 8
+      }
+    },
+    "fastest": {
+      "orders": [
+        {
+          "product_id": "P001",
+          "supplier_id": "SUP-103",
+          "supplier_name": "SwiftFurnish Express",
+          "order_qty": 151,
+          "total_cost": 18875.0,
+          "lead_time_days": 2,
+          "shortfall_before_arrival": 5.22,
+          "days_uncovered_before_arrival": 0.52,
+          "risk_level": "Critical"
+        },
+        {
+          "product_id": "P003",
+          "supplier_id": "SUP-106",
+          "supplier_name": "NexLink Technologies",
+          "order_qty": 155,
+          "total_cost": 11160.0,
+          "lead_time_days": 4,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "Medium"
+        },
+        {
+          "product_id": "P004",
+          "supplier_id": "SUP-103",
+          "supplier_name": "SwiftFurnish Express",
+          "order_qty": 104,
+          "total_cost": 9568.0,
+          "lead_time_days": 3,
+          "shortfall_before_arrival": 17.61,
+          "days_uncovered_before_arrival": 3.0,
+          "risk_level": "Critical"
+        },
+        {
+          "product_id": "P006",
+          "supplier_id": "SUP-106",
+          "supplier_name": "NexLink Technologies",
+          "order_qty": 131,
+          "total_cost": 28165.0,
+          "lead_time_days": 6,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "Medium"
+        },
+        {
+          "product_id": "P007",
+          "supplier_id": "SUP-110",
+          "supplier_name": "DirectPOS Hardware",
+          "order_qty": 286,
+          "total_cost": 19734.0,
+          "lead_time_days": 4,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "High"
+        },
+        {
+          "product_id": "P008",
+          "supplier_id": "SUP-109",
+          "supplier_name": "ErgoCare Distributors",
+          "order_qty": 15,
+          "total_cost": 480.0,
+          "lead_time_days": 5,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "Low"
+        },
+        {
+          "product_id": "P009",
+          "supplier_id": "SUP-106",
+          "supplier_name": "NexLink Technologies",
+          "order_qty": 15,
+          "total_cost": 420.0,
+          "lead_time_days": 3,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "Low"
+        },
+        {
+          "product_id": "P010",
+          "supplier_id": "SUP-110",
+          "supplier_name": "DirectPOS Hardware",
+          "order_qty": 24,
+          "total_cost": 3240.0,
+          "lead_time_days": 4,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "Medium"
+        }
+      ],
+      "totals": {
+        "total_cost": 91642.0,
+        "average_lead_time": 3.88,
+        "total_units_short": 22.83,
+        "critical_or_high_count": 3
+      }
+    },
+    "recommended": {
+      "orders": [
+        {
+          "product_id": "P001",
+          "supplier_id": "SUP-103",
+          "supplier_name": "SwiftFurnish Express",
+          "order_qty": 151,
+          "total_cost": 18875.0,
+          "lead_time_days": 2,
+          "shortfall_before_arrival": 5.22,
+          "days_uncovered_before_arrival": 0.52,
+          "risk_level": "Critical",
+          "reason": "No supplier avoids a stockout; SUP-103 minimises the gap with 5.22 units shortfall (lead time 2d, cost $18,875.00)."
+        },
+        {
+          "product_id": "P003",
+          "supplier_id": "SUP-106",
+          "supplier_name": "NexLink Technologies",
+          "order_qty": 155,
+          "total_cost": 11160.0,
+          "lead_time_days": 4,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "Medium",
+          "reason": "SUP-106 chosen: covers demand without stockout (lead time 4d) at lowest cost ($11,160.00)."
+        },
+        {
+          "product_id": "P004",
+          "supplier_id": "SUP-103",
+          "supplier_name": "SwiftFurnish Express",
+          "order_qty": 104,
+          "total_cost": 9568.0,
+          "lead_time_days": 3,
+          "shortfall_before_arrival": 17.61,
+          "days_uncovered_before_arrival": 3.0,
+          "risk_level": "Critical",
+          "reason": "No supplier avoids a stockout; SUP-103 minimises the gap with 17.61 units shortfall (lead time 3d, cost $9,568.00)."
+        },
+        {
+          "product_id": "P006",
+          "supplier_id": "SUP-106",
+          "supplier_name": "NexLink Technologies",
+          "order_qty": 131,
+          "total_cost": 28165.0,
+          "lead_time_days": 6,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "Medium",
+          "reason": "SUP-106 chosen: covers demand without stockout (lead time 6d) at lowest cost ($28,165.00)."
+        },
+        {
+          "product_id": "P007",
+          "supplier_id": "SUP-110",
+          "supplier_name": "DirectPOS Hardware",
+          "order_qty": 286,
+          "total_cost": 19734.0,
+          "lead_time_days": 4,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "High",
+          "reason": "SUP-110 chosen: covers demand without stockout (lead time 4d) at lowest cost ($19,734.00)."
+        },
+        {
+          "product_id": "P008",
+          "supplier_id": "SUP-109",
+          "supplier_name": "ErgoCare Distributors",
+          "order_qty": 15,
+          "total_cost": 480.0,
+          "lead_time_days": 5,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "Low",
+          "reason": "SUP-109 chosen: lowest cost option ($480.00) with zero stockout risk (lead time 5d)."
+        },
+        {
+          "product_id": "P009",
+          "supplier_id": "SUP-106",
+          "supplier_name": "NexLink Technologies",
+          "order_qty": 15,
+          "total_cost": 420.0,
+          "lead_time_days": 3,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "Low",
+          "reason": "SUP-106 chosen: lowest cost option ($420.00) with zero stockout risk (lead time 3d)."
+        },
+        {
+          "product_id": "P010",
+          "supplier_id": "SUP-110",
+          "supplier_name": "DirectPOS Hardware",
+          "order_qty": 24,
+          "total_cost": 3240.0,
+          "lead_time_days": 4,
+          "shortfall_before_arrival": 0.0,
+          "days_uncovered_before_arrival": 0.0,
+          "risk_level": "Medium",
+          "reason": "SUP-110 chosen: covers demand without stockout (lead time 4d) at lowest cost ($3,240.00)."
+        }
+      ],
+      "totals": {
+        "total_cost": 91642.0,
+        "average_lead_time": 3.88,
+        "total_units_short": 22.83,
+        "critical_or_high_count": 3
+      }
+    }
+  },
+  "cheapest_strategy": {
+    "orders": [
+      {
+        "product_id": "P001",
+        "supplier_id": "SUP-101",
+        "supplier_name": "Apex Office Works",
+        "order_qty": 279,
+        "total_cost": 24552.0,
+        "lead_time_days": 14,
+        "shortfall_before_arrival": 126.54,
+        "days_uncovered_before_arrival": 12.52,
+        "risk_level": "Critical"
+      },
+      {
+        "product_id": "P003",
+        "supplier_id": "SUP-105",
+        "supplier_name": "AeroTech Components",
+        "order_qty": 310,
+        "total_cost": 17980.0,
+        "lead_time_days": 15,
+        "shortfall_before_arrival": 106.3,
+        "days_uncovered_before_arrival": 7.92,
+        "risk_level": "Critical"
+      },
+      {
+        "product_id": "P004",
+        "supplier_id": "SUP-107",
+        "supplier_name": "SonicWave Global",
+        "order_qty": 197,
+        "total_cost": 12214.0,
+        "lead_time_days": 18,
+        "shortfall_before_arrival": 105.66,
+        "days_uncovered_before_arrival": 18.0,
+        "risk_level": "Critical"
+      },
+      {
+        "product_id": "P006",
+        "supplier_id": "SUP-104",
+        "supplier_name": "Pacific Keytronics",
+        "order_qty": 350,
+        "total_cost": 61250.0,
+        "lead_time_days": 20,
+        "shortfall_before_arrival": 119.4,
+        "days_uncovered_before_arrival": 7.98,
+        "risk_level": "Critical"
+      },
+      {
+        "product_id": "P007",
+        "supplier_id": "SUP-108",
+        "supplier_name": "Vanguard Audio Supply",
+        "order_qty": 472,
+        "total_cost": 25488.0,
+        "lead_time_days": 12,
+        "shortfall_before_arrival": 139.84,
+        "days_uncovered_before_arrival": 6.34,
+        "risk_level": "Critical"
+      },
+      {
+        "product_id": "P008",
+        "supplier_id": "SUP-101",
+        "supplier_name": "Apex Office Works",
+        "order_qty": 65,
+        "total_cost": 1560.0,
+        "lead_time_days": 14,
+        "shortfall_before_arrival": 0.0,
+        "days_uncovered_before_arrival": 0.0,
+        "risk_level": "High"
+      },
+      {
+        "product_id": "P009",
+        "supplier_id": "SUP-104",
+        "supplier_name": "Pacific Keytronics",
+        "order_qty": 258,
+        "total_cost": 4644.0,
+        "lead_time_days": 18,
+        "shortfall_before_arrival": 0.0,
+        "days_uncovered_before_arrival": 0.0,
+        "risk_level": "High"
+      },
+      {
+        "product_id": "P010",
+        "supplier_id": "SUP-107",
+        "supplier_name": "SonicWave Global",
+        "order_qty": 54,
+        "total_cost": 5670.0,
+        "lead_time_days": 15,
+        "shortfall_before_arrival": 13.55,
+        "days_uncovered_before_arrival": 5.27,
+        "risk_level": "Critical"
+      }
+    ],
+    "totals": {
+      "total_cost": 153358.0,
+      "average_lead_time": 15.75,
+      "total_units_short": 611.29,
+      "critical_or_high_count": 8
+    }
+  },
+  "fastest_strategy": {
+    "orders": [
+      {
+        "product_id": "P001",
+        "supplier_id": "SUP-103",
+        "supplier_name": "SwiftFurnish Express",
+        "order_qty": 151,
+        "total_cost": 18875.0,
+        "lead_time_days": 2,
+        "shortfall_before_arrival": 5.22,
+        "days_uncovered_before_arrival": 0.52,
+        "risk_level": "Critical"
+      },
+      {
+        "product_id": "P003",
+        "supplier_id": "SUP-106",
+        "supplier_name": "NexLink Technologies",
+        "order_qty": 155,
+        "total_cost": 11160.0,
+        "lead_time_days": 4,
+        "shortfall_before_arrival": 0.0,
+        "days_uncovered_before_arrival": 0.0,
+        "risk_level": "Medium"
+      },
+      {
+        "product_id": "P004",
+        "supplier_id": "SUP-103",
+        "supplier_name": "SwiftFurnish Express",
+        "order_qty": 104,
+        "total_cost": 9568.0,
+        "lead_time_days": 3,
+        "shortfall_before_arrival": 17.61,
+        "days_uncovered_before_arrival": 3.0,
+        "risk_level": "Critical"
+      },
+      {
+        "product_id": "P006",
+        "supplier_id": "SUP-106",
+        "supplier_name": "NexLink Technologies",
+        "order_qty": 131,
+        "total_cost": 28165.0,
+        "lead_time_days": 6,
+        "shortfall_before_arrival": 0.0,
+        "days_uncovered_before_arrival": 0.0,
+        "risk_level": "Medium"
+      },
+      {
+        "product_id": "P007",
+        "supplier_id": "SUP-110",
+        "supplier_name": "DirectPOS Hardware",
+        "order_qty": 286,
+        "total_cost": 19734.0,
+        "lead_time_days": 4,
+        "shortfall_before_arrival": 0.0,
+        "days_uncovered_before_arrival": 0.0,
+        "risk_level": "High"
+      },
+      {
+        "product_id": "P008",
+        "supplier_id": "SUP-109",
+        "supplier_name": "ErgoCare Distributors",
+        "order_qty": 15,
+        "total_cost": 480.0,
+        "lead_time_days": 5,
+        "shortfall_before_arrival": 0.0,
+        "days_uncovered_before_arrival": 0.0,
+        "risk_level": "Low"
+      },
+      {
+        "product_id": "P009",
+        "supplier_id": "SUP-106",
+        "supplier_name": "NexLink Technologies",
+        "order_qty": 15,
+        "total_cost": 420.0,
+        "lead_time_days": 3,
+        "shortfall_before_arrival": 0.0,
+        "days_uncovered_before_arrival": 0.0,
+        "risk_level": "Low"
+      },
+      {
+        "product_id": "P010",
+        "supplier_id": "SUP-110",
+        "supplier_name": "DirectPOS Hardware",
+        "order_qty": 24,
+        "total_cost": 3240.0,
+        "lead_time_days": 4,
+        "shortfall_before_arrival": 0.0,
+        "days_uncovered_before_arrival": 0.0,
+        "risk_level": "Medium"
+      }
+    ],
+    "totals": {
+      "total_cost": 91642.0,
+      "average_lead_time": 3.88,
+      "total_units_short": 22.83,
+      "critical_or_high_count": 3
+    }
+  },
+  "recommended_plan": {
+    "orders": [
+      {
+        "product_id": "P001",
+        "supplier_id": "SUP-103",
+        "supplier_name": "SwiftFurnish Express",
+        "order_qty": 151,
+        "total_cost": 18875.0,
+        "lead_time_days": 2,
+        "shortfall_before_arrival": 5.22,
+        "days_uncovered_before_arrival": 0.52,
+        "risk_level": "Critical",
+        "reason": "No supplier avoids a stockout; SUP-103 minimises the gap with 5.22 units shortfall (lead time 2d, cost $18,875.00)."
+      },
+      {
+        "product_id": "P003",
+        "supplier_id": "SUP-106",
+        "supplier_name": "NexLink Technologies",
+        "order_qty": 155,
+        "total_cost": 11160.0,
+        "lead_time_days": 4,
+        "shortfall_before_arrival": 0.0,
+        "days_uncovered_before_arrival": 0.0,
+        "risk_level": "Medium",
+        "reason": "SUP-106 chosen: covers demand without stockout (lead time 4d) at lowest cost ($11,160.00)."
+      },
+      {
+        "product_id": "P004",
+        "supplier_id": "SUP-103",
+        "supplier_name": "SwiftFurnish Express",
+        "order_qty": 104,
+        "total_cost": 9568.0,
+        "lead_time_days": 3,
+        "shortfall_before_arrival": 17.61,
+        "days_uncovered_before_arrival": 3.0,
+        "risk_level": "Critical",
+        "reason": "No supplier avoids a stockout; SUP-103 minimises the gap with 17.61 units shortfall (lead time 3d, cost $9,568.00)."
+      },
+      {
+        "product_id": "P006",
+        "supplier_id": "SUP-106",
+        "supplier_name": "NexLink Technologies",
+        "order_qty": 131,
+        "total_cost": 28165.0,
+        "lead_time_days": 6,
+        "shortfall_before_arrival": 0.0,
+        "days_uncovered_before_arrival": 0.0,
+        "risk_level": "Medium",
+        "reason": "SUP-106 chosen: covers demand without stockout (lead time 6d) at lowest cost ($28,165.00)."
+      },
+      {
+        "product_id": "P007",
+        "supplier_id": "SUP-110",
+        "supplier_name": "DirectPOS Hardware",
+        "order_qty": 286,
+        "total_cost": 19734.0,
+        "lead_time_days": 4,
+        "shortfall_before_arrival": 0.0,
+        "days_uncovered_before_arrival": 0.0,
+        "risk_level": "High",
+        "reason": "SUP-110 chosen: covers demand without stockout (lead time 4d) at lowest cost ($19,734.00)."
+      },
+      {
+        "product_id": "P008",
+        "supplier_id": "SUP-109",
+        "supplier_name": "ErgoCare Distributors",
+        "order_qty": 15,
+        "total_cost": 480.0,
+        "lead_time_days": 5,
+        "shortfall_before_arrival": 0.0,
+        "days_uncovered_before_arrival": 0.0,
+        "risk_level": "Low",
+        "reason": "SUP-109 chosen: lowest cost option ($480.00) with zero stockout risk (lead time 5d)."
+      },
+      {
+        "product_id": "P009",
+        "supplier_id": "SUP-106",
+        "supplier_name": "NexLink Technologies",
+        "order_qty": 15,
+        "total_cost": 420.0,
+        "lead_time_days": 3,
+        "shortfall_before_arrival": 0.0,
+        "days_uncovered_before_arrival": 0.0,
+        "risk_level": "Low",
+        "reason": "SUP-106 chosen: lowest cost option ($420.00) with zero stockout risk (lead time 3d)."
+      },
+      {
+        "product_id": "P010",
+        "supplier_id": "SUP-110",
+        "supplier_name": "DirectPOS Hardware",
+        "order_qty": 24,
+        "total_cost": 3240.0,
+        "lead_time_days": 4,
+        "shortfall_before_arrival": 0.0,
+        "days_uncovered_before_arrival": 0.0,
+        "risk_level": "Medium",
+        "reason": "SUP-110 chosen: covers demand without stockout (lead time 4d) at lowest cost ($3,240.00)."
+      }
+    ],
+    "totals": {
+      "total_cost": 91642.0,
+      "average_lead_time": 3.88,
+      "total_units_short": 22.83,
+      "critical_or_high_count": 3
+    }
+  }
+}

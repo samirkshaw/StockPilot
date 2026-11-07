@@ -7,7 +7,7 @@ and replenishment order quantities based on demand forecasts and stock levels.
 
 import math
 import os
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 from tools.inventory_lookup import inventory_lookup
 from tools.sales_analysis import analyze_sales
 
@@ -20,6 +20,7 @@ def calculate_reorder(
     lead_time_days: int,
     coverage_days: int = 14,
     service_z: float = 1.65,
+    daily_demand_override: Optional[float] = None,
 ) -> Dict[str, Any]:
     """
     Calculate inventory risk metrics and recommended replenishment quantity.
@@ -29,6 +30,7 @@ def calculate_reorder(
         lead_time_days: Expected shipment transit duration in days.
         coverage_days: Target inventory cover duration to replenish post-arrival (default: 14 days).
         service_z: Safety factor for target cycle service level (default: 1.65 for ~95% service level).
+        daily_demand_override: Optional daily demand to use instead of sales_analysis.recommended_demand.
 
     Returns:
         dict: A JSON-serializable dictionary containing:
@@ -69,7 +71,10 @@ def calculate_reorder(
     cov_days = max(1, int(coverage_days))
     z = float(service_z)
 
-    daily_demand = float(sales_data["recommended_demand"])
+    if daily_demand_override is not None:
+        daily_demand = float(round(daily_demand_override, 2))
+    else:
+        daily_demand = float(sales_data["recommended_demand"])
     std_daily_demand = float(sales_data["std_daily_demand"])
     current_stock = int(inv_data["current_stock"])
 
