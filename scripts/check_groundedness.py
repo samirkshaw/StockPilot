@@ -53,12 +53,26 @@ def collect_plan_numbers(obj: Any, target_set: Set[float]) -> None:
                 pass
 
 
+LINE_NUMBERING_RE = re.compile(r"^\s*\d+(?:[\.\)]|\s+[-–—])(?:\s+|$)")
+
+
+def strip_line_numbering(text: str) -> str:
+    """
+    Ignore numbers that are list or heading numbering at the start of a line
+    (e.g., '1.', '2)', '3 -').
+    """
+    lines = text.splitlines()
+    cleaned_lines = [LINE_NUMBERING_RE.sub(" ", line) for line in lines]
+    return "\n".join(cleaned_lines)
+
+
 def extract_numbers_from_text(text: str) -> List[Tuple[str, float, str]]:
     """
     Remove product IDs (P001-style) and supplier IDs (SUP-103-style),
-    then extract all remaining numeric values with surrounding context.
+    strip line numbering, then extract all remaining numeric values with surrounding context.
     """
-    cleaned = re.sub(r"\bP\d{3}\b", " ", text)
+    cleaned = strip_line_numbering(text)
+    cleaned = re.sub(r"\bP\d{3}\b", " ", cleaned)
     cleaned = re.sub(r"\bSUP-\d{3}\b", " ", cleaned)
 
     pattern = re.compile(r"(?:[\$])?(\d{1,3}(?:,\d{3})*(?:\.\d+)?|\d+(?:\.\d+)?)(?:%)?")
@@ -83,11 +97,13 @@ def extract_numbers_from_text(text: str) -> List[Tuple[str, float, str]]:
     return extracted
 
 
-def build_per_product_number_map(plan: Dict[str, Any]) -> Dict[str, Set[float]]:
+def build_per_product_number_map(
+    plan: Dict[str, Any],
+    tool_calls: Optional[List[Dict[str, Any]]] = None,
+) -> Dict[str, Set[float]]:
     """
     Build a dictionary mapping product_id to the set of numbers appearing
-    under that product in the plan (recommended order, supplier options,
-    thin_buffer_products, unavoidable_stockouts, and inventory fields).
+    under that product in the plan and in tool results whose args contain that product_id.
     """
     prod_map: Dict[str, Set[float]] = {}
     all_pids = [f"P{i:03d}" for i in range(1, 11)]
@@ -114,6 +130,27 @@ def build_per_product_number_map(plan: Dict[str, Any]) -> Dict[str, Set[float]]:
         for u in plan.get("unavoidable_stockouts", []):
             if u.get("product_id") == pid:
                 collect_plan_numbers(u, s)
+
+        # 5. Tool results whose args contain that product_id
+        if tool_calls:
+            for tc in tool_calls:
+                if not isinstance(tc, dict):
+                    continue
+                res = tc.get("result")
+                if res is None:
+                    continue
+                args = tc.get("args", {})
+                args_contain_pid = False
+                if isinstance(args, dict):
+                    args_contain_pid = any(
+                        pid == v or (isinstance(v, str) and pid in v)
+                        for v in args.values()
+                    )
+                elif isinstance(args, str):
+                    args_contain_pid = pid in args
+
+                if args_contain_pid:
+                    collect_plan_numbers(res, s)
 
         prod_map[pid] = s
 
@@ -180,6 +217,17 @@ def main():
         print("Error: No final_answer found in run data.")
         sys.exit(0)
 
+    # Check available stored tool results in the run data
+    stored_tool_results = [
+        tc for tc in agent_data.get("tool_calls", [])
+        if isinstance(tc, dict) and "result" in tc and tc["result"] is not None
+    ]
+    tool_results_count = len(stored_tool_results)
+    if tool_results_count > 0:
+        print(f"Tool results available: {tool_results_count}")
+    else:
+        print("Tool results available: plan only (no stored tool results)")
+
     # 2. Load or re-generate procurement plan
     plan_path = os.path.join(REPORTS_DIR, "procurement_plan.json")
     if os.path.exists(plan_path):
@@ -195,6 +243,9 @@ def main():
     collect_plan_numbers(plan, global_plan_numbers)
     for i in range(1, 11):
         global_plan_numbers.add(float(i))
+
+    for tc in stored_tool_results:
+        collect_plan_numbers(tc.get("result"), global_plan_numbers)
 
     extracted_global = extract_numbers_from_text(final_answer)
     global_matched = 0
@@ -235,7 +286,7 @@ def main():
     # -------------------------------------------------------------------------
     # PART B: PER-PRODUCT GROUNDEDNESS CHECK
     # -------------------------------------------------------------------------
-    prod_number_map = build_per_product_number_map(plan)
+    prod_number_map = build_per_product_number_map(plan, stored_tool_results)
     product_blocks = split_into_product_blocks(final_answer)
 
     total_prod_numbers = 0
@@ -245,7 +296,7 @@ def main():
     num_pattern = re.compile(r"(?:[\$])?(\d{1,3}(?:,\d{3})*(?:\.\d+)?|\d+(?:\.\d+)?)(?:%)?")
 
     for pid, blines in product_blocks:
-        btext = "\n".join(blines)
+        btext = strip_line_numbering("\n".join(blines))
         cleaned = re.sub(r"\bP\d{3}\b", " ", btext)
         cleaned = re.sub(r"\bSUP-\d{3}\b", " ", cleaned)
         matches = list(num_pattern.finditer(cleaned))

@@ -20,7 +20,7 @@ if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
 
 from agent.stockpilot_agent import SYSTEM_INSTRUCTION, run_agent
-from agent.tool_registry import execute_tool
+from agent.tool_registry import FUNCTION_DECLARATIONS, execute_tool
 
 
 class MockModelsService:
@@ -102,8 +102,10 @@ def run_tests():
     assert res1["api_call_count"] == 2, f"Expected 2 API calls, got {res1['api_call_count']}"
     assert len(res1["tool_calls"]) == 1, f"Expected 1 tool call, got {len(res1['tool_calls'])}"
     assert res1["tool_calls"][0]["name"] == "get_procurement_plan"
+    assert "result" in res1["tool_calls"][0], "Expected 'result' field in tool_calls record"
+    assert isinstance(res1["tool_calls"][0]["result"], dict), "Expected dict in 'result' field"
     assert "Procurement plan analyzed" in res1["final_answer"]
-    print(" -> PASSED: Agent successfully called tool and returned synthesized answer (api_calls=2).")
+    print(" -> PASSED: Agent successfully called tool and returned synthesized answer (api_calls=2, result field verified).")
 
     # --------------------------------------------------------------------------
     # Check 2: Unknown tool name handling
@@ -185,12 +187,26 @@ def run_tests():
     print(" -> PASSED: Missing GEMINI_API_KEY cleanly returns error dict without stack trace.")
 
     # --------------------------------------------------------------------------
-    # Check 6: System instruction contains required Step 5b terms
+    # Check 6: System instruction contains required Step 5b and 6b terms
     # --------------------------------------------------------------------------
-    print("\n[Check 6] Verifying system instruction contains 'simulated' and 'thin_buffer_products'...")
+    print("\n[Check 6] Verifying system instruction contains required terms...")
     assert "simulated" in SYSTEM_INSTRUCTION, "SYSTEM_INSTRUCTION must contain the word 'simulated'"
     assert "thin_buffer_products" in SYSTEM_INSTRUCTION, "SYSTEM_INSTRUCTION must contain 'thin_buffer_products'"
-    print(" -> PASSED: System instruction contains 'simulated' and 'thin_buffer_products'.")
+    assert "get_demand_impact" in SYSTEM_INSTRUCTION, "SYSTEM_INSTRUCTION must contain 'get_demand_impact'"
+    print(" -> PASSED: System instruction contains 'simulated', 'thin_buffer_products', and 'get_demand_impact'.")
+
+    # --------------------------------------------------------------------------
+    # Check 7: Step 6b get_demand_impact registration and execution
+    # --------------------------------------------------------------------------
+    print("\n[Check 7] Verifying get_demand_impact registration and execute_tool...")
+    tool_names = [decl.name for decl in FUNCTION_DECLARATIONS]
+    assert "get_demand_impact" in tool_names, f"Expected get_demand_impact in declarations, got {tool_names}"
+
+    impact_res = execute_tool("get_demand_impact", {"product_id": "P003"})
+    assert isinstance(impact_res, dict), f"Expected dict, got {type(impact_res)}"
+    assert "error" not in impact_res, f"Unexpected error executing get_demand_impact: {impact_res.get('error')}"
+    assert impact_res["spike_detected"] is True
+    print(" -> PASSED: get_demand_impact is exposed in tool declarations and executes cleanly.")
 
     print("\n" + "=" * 80)
     print("ALL AGENT UNIT TESTS PASSED SUCCESSFULLY.")

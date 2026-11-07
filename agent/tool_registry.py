@@ -14,6 +14,7 @@ from tools.demand_forecast import forecast_demand
 from tools.supplier_comparison import compare_suppliers
 from tools.reorder_calculation import calculate_reorder
 from tools.procurement_planner import build_procurement_plan
+from tools.demand_impact import get_demand_impact
 
 # In-memory cache for get_procurement_plan within an agent run
 _PLAN_CACHE: Dict[str, Any] = {}
@@ -123,7 +124,9 @@ FUNCTION_DECLARATIONS: List[types.FunctionDeclaration] = [
         name="calculate_reorder",
         description=(
             "Calculate stockout shortfall before arrival, safety stock, reorder point, "
-            "recommended order quantity, and urgency risk level for a supplier's lead time."
+            "recommended order quantity, and urgency risk level for a supplier's lead time. "
+            "Note: its recommended_order_qty is an independent what-if using lead time plus coverage_days "
+            "and is NOT the official plan quantity."
         ),
         parameters={
             "type": "OBJECT",
@@ -152,6 +155,23 @@ FUNCTION_DECLARATIONS: List[types.FunctionDeclaration] = [
             "required": ["product_id", "lead_time_days"],
         },
     ),
+    types.FunctionDeclaration(
+        name="get_demand_impact",
+        description=(
+            "compares demand and order quantity under the long-run average versus the recent trend and forecast; "
+            "use it for questions about demand spikes or how demand changes the order quantity"
+        ),
+        parameters={
+            "type": "OBJECT",
+            "properties": {
+                "product_id": {
+                    "type": "STRING",
+                    "description": "Unique identifier of the product (e.g. 'P001', 'P003').",
+                },
+            },
+            "required": ["product_id"],
+        },
+    ),
 ]
 
 
@@ -168,6 +188,7 @@ _TOOL_MAP: Dict[str, Callable[..., Any]] = {
     "compare_suppliers": compare_suppliers,
     "calculate_reorder": calculate_reorder,
     "get_procurement_plan": _cached_get_procurement_plan,
+    "get_demand_impact": get_demand_impact,
 }
 
 
